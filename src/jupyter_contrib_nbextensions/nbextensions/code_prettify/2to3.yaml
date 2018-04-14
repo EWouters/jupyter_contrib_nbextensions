@@ -54,7 +54,7 @@ Parameters:
     {
       "python": {
         "library": "import lib2to3.refactor, json\n_2to3_refactoring_tool = lib2to3.refactor.RefactoringTool(\n    set(lib2to3.refactor.get_fixers_from_package('lib2to3.fixes')))\ndef _2to3_refactor_cell(src):\n    try:\n        tree = _2to3_refactoring_tool.refactor_string(src+'\\n', '<dummy_name>')\n    except (lib2to3.pgen2.parse.ParseError, lib2to3.pgen2.tokenize.TokenError):\n        return src \n    else:\n        return str(tree)[:-1]",
-        "prefix": "print(json.dumps(refactor_cell(u",
+        "prefix": "print(json.dumps(_2to3_refactor_cell(u",
         "postfix": ")))"
       }
     }
