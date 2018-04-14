@@ -2,9 +2,7 @@
 
 define([
     "base/js/namespace",
-    "base/js/utils",
     "notebook/js/cell",
-    "services/config",
     "codemirror/lib/codemirror",
     "codemirror/keymap/emacs",
     "codemirror/keymap/vim",
@@ -16,7 +14,12 @@ define([
     "codemirror/addon/edit/matchbrackets",
     "codemirror/addon/search/searchcursor",
     "codemirror/addon/search/search",
-], function(Jupyter, utils, Cell, configmod, CodeMirror) {
+], function(
+    Jupyter,
+    Cell,
+    CodeMirror
+    // other stuff is loaded, but not used
+) {
     "use_strict";
 
     var previous_mode = "";
@@ -27,6 +30,12 @@ define([
         "vim",
         "sublime"
     ];
+
+    /* Values to use for config keys that are note defined in server config */
+    var default_config = {
+        line_wrap: true,
+        local_storage: true,
+    };
 
     var starting_state = {
         extraKeys: {},
@@ -46,38 +55,38 @@ define([
                     "Ctrl-[": "leave_current_mode"
                 },
                 command_shortcuts: {
-                    "ctrl-c": "jupyter-notebook:interrupt-kernel",
-                    "ctrl-z": "jupyter-notebook:restart-kernel",
+                    "Ctrl-c": "jupyter-notebook:interrupt-kernel",
+                    "Ctrl-z": "jupyter-notebook:restart-kernel",
 
                     "d,d": "jupyter-notebook:cut-cell",
                     "y,y": "jupyter-notebook:copy-cell",
                     "u": "jupyter-notebook:undo-cell-deletion",
 
                     "p": "jupyter-notebook:paste-cell-below",
-                    "shift-p": "jupyter-notebook:paste-cell-above",
+                    "Shift-P": "jupyter-notebook:paste-cell-above",
 
                     "o": "jupyter-notebook:insert-cell-below",
-                    "shift-o": "jupyter-notebook:insert-cell-above",
+                    "Shift-O": "jupyter-notebook:insert-cell-above",
 
                     "i": "jupyter-notebook:enter-edit-mode",
-                    "enter": "jupyter-notebook:enter-edit-mode",
+                    "Enter": "jupyter-notebook:enter-edit-mode",
 
-                    "shift-j": "jupyter-notebook:move-cell-down",
-                    "shift-k": "jupyter-notebook:move-cell-up",
+                    "Shift-J": "jupyter-notebook:move-cell-down",
+                    "Shift-K": "jupyter-notebook:move-cell-up",
 
-                    "shift-/": "jupyter-notebook:show-keyboard-shortcuts",
+                    "Shift-/": "jupyter-notebook:show-keyboard-shortcuts",
                     "h": "jupyter-notebook:toggle-cell-output-collapsed",
-                    "shift-h": "jupyter-notebook:toggle-cell-output-scrolled",
+                    "Shift-H": "jupyter-notebook:toggle-cell-output-scrolled",
 
                     "`": "jupyter-notebook:change-cell-to-code",
                     "0": "jupyter-notebook:change-cell-to-markdown"
                 },
                 edit_shortcuts: {
-                    "shift-esc": "jupyter-notebook:enter-command-mode"
+                    "Shift-Esc": "jupyter-notebook:enter-command-mode"
                 }
             },
             remove: {
-                edit_shortcuts: ["esc"]
+                edit_shortcuts: ["Esc"]
             },
             custom: function() {
                 disable_keyboard_manager_in_dialog(this);
@@ -92,8 +101,8 @@ define([
                     "Ctrl-Y": "yank_no_selection"
                 },
                 command_shortcuts: {
-                    "ctrl-n": "jupyter-notebook:select-next-cell",
-                    "ctrl-p": "jupyter-notebook:select-previous-cell",
+                    "Ctrl-N": "jupyter-notebook:select-next-cell",
+                    "Ctrl-P": "jupyter-notebook:select-previous-cell",
                     "Alt-X": "jupyter-notebook:show-command-palette"
 
                 },
@@ -102,7 +111,7 @@ define([
                 }
             },
             remove: {
-                edit_shortcuts: ["ctrl-shift-minus"],
+                edit_shortcuts: ["Ctrl-Shift-Minus"],
                 keyMap: ["Ctrl-V"]
             },
             custom: function() {
@@ -134,22 +143,19 @@ define([
         CodeMirror.defineExtension("openDialog", _this.openDialog);
     }
 
-    var base_url = utils.get_body_data("baseUrl");
-    var server_config = new configmod.ConfigSection("notebook", {
-        base_url: base_url
-    });
-
-    server_config.load();
-
+    var server_config = Jupyter.notebook.config;
     // make sure config is loaded before making initial changes
-    server_config.loaded.then(function() {
+    var initialize = function () {
         save_starting_state();
         // initialize last stored value or default
         switch_keymap(get_stored_keymap());
-    });
+    };
 
     function get_config(key) {
-        return server_config.data["select_keymap_" + key];
+        if (server_config.data.hasOwnProperty("select_keymap_" + key)) {
+            return server_config.data["select_keymap_" + key];
+        }
+        return default_config[key];
     }
 
     function get_stored_keymap() {
@@ -356,6 +362,10 @@ define([
     window.switch_keymap = switch_keymap;
 
     return {
-        load_ipython_extension: create_menu
+        load_ipython_extension: function () {
+            return Jupyter.notebook.config.loaded
+                .then(initialize)
+                .then(create_menu);
+        }
     };
 });

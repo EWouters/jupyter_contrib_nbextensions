@@ -9,7 +9,7 @@ This extension limits the number of characters a codecell will output as text
 or HTML.
 This also allows the interruption of endless loops of print commands.
 
-[![Demo Video](http://img.youtube.com/vi/U26ujuPXf00/0.jpg)](https://youtu.be/U26ujuPXf00)
+[![Demo Video](https://img.youtube.com/vi/U26ujuPXf00/0.jpg)](https://youtu.be/U26ujuPXf00)
 
 You can set the number of characters using the ConfigManager:
 
@@ -37,3 +37,12 @@ counted, and if either exceeds `limit_output` characters will be truncated to
 The `limit_output_message` parameter can be formatted to display the
 `limit_output` length and the current `output_length`, using the respective
 replacement fields `{limit_output_length}` and `{output_length}`.
+
+### Parameter Overview
+
+* limit_output - Number of characters to limit output to
+* limit_stream - Enable limiting stream messages
+* limit_execute_result - Enable limiting execute_result messages
+* limit_display_data - Enable limiting display_data messages
+* limit_output_message - Message to append when output is limited
+

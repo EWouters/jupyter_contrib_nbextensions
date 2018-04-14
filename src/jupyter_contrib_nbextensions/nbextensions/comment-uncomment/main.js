@@ -2,26 +2,20 @@
 
 define([
     'base/js/namespace',
-    'services/config',
-    'base/js/utils'
 ], function(
-    IPython,
-    configmod,
-    utils
+    IPython
 ) {
     "use strict";
-
-    // create config object to load parameters
-    var base_url = utils.get_body_data("baseUrl");
-    var config = new configmod.ConfigSection('notebook', {base_url: base_url});
 
     // define default config parameter values
     var params = {
         comment_uncomment_keybinding : 'alt-c',
+        comment_uncomment_indent: false,
     };
 
     // updates default params with any specified in the server's config
     var update_params = function() {
+        var config = IPython.notebook.config;
         for (var key in params){
             if (config.data.hasOwnProperty(key) ){
                 params[key] = config.data[key];
@@ -29,7 +23,7 @@ define([
         }
     };
 
-    config.loaded.then(function() {
+    var initialize = function () {
         // update defaults
         update_params();
 
@@ -51,18 +45,16 @@ define([
 
         // register keyboard shortcuts with keyboard_manager
         IPython.notebook.keyboard_manager.edit_shortcuts.add_shortcuts(edit_mode_shortcuts);
-    });
+    };
 
     var toggle_comment = function() {
         var cm = IPython.notebook.get_selected_cell().code_mirror;
-        var from = cm.getCursor("start"), to = cm.getCursor("end");
-        if (!cm.uncomment(from, to)) cm.lineComment(from, to);
+        cm.toggleComment({ indent: params.comment_uncomment_indent });
         return false;
     };
 
     var load_ipython_extension = function () {
-        // load config to trigger keybinding registration
-        config.load();
+        return IPython.notebook.config.loaded.then(initialize);
     };
 
     return {

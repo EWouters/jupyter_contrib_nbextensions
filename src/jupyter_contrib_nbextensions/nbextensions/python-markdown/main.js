@@ -16,7 +16,7 @@ define([
     'components/marked/lib/marked',
     'base/js/events',
     'notebook/js/textcell'
-], function(IPython, $, require, cell, security, marked, events, textcell) {
+], function(IPython, $, requirejs, cell, security, marked, events, textcell) {
     "use strict";
 
     /*
@@ -63,9 +63,9 @@ define([
                             html = marked(text);
                         } else if (out_data.msg_type === "stream") {
                             html = marked(out_data.content.text);
-                            var t = html.match(/<p>([\s\S]*?)<\/p>/)[1]; //strip <p> and </p> that marked adds and we don't want
-                            html = t ? t : html;
-                            var q = html.match(/&#39;([\s\S]*?)&#39;/); // strip quotes from strings
+                            var t = html.match(/^\s*<p>([\s\S]*?)<\/p>\s*$/); //strip <p> and </p> that marked (maybe) adds and we don't want
+                            html = t !== null ? t[1] : html;
+                            var q = html.match(/^&#39;([\s\S]*?)&#39;$/); // strip quotes from strings
                             if (q !== null) html = q[1]
                         } else if (out_data.msg_type === "execute_result" | out_data.msg_type === "display_data" ) {
                             var ul = out_data.content.data;
@@ -90,9 +90,9 @@ define([
                                 } else {
                                     html = marked(ul['text/plain']);
                                     // [\s\S] is used to also catch newlines
-                                    var t = html.match(/<p>([\s\S]*?)<\/p>/)[1]; //strip <p> and </p> that marked adds and we don't want
-                                    html = t ? t : html;
-                                    var q = html.match(/&#39;([\s\S]*?)&#39;/); // strip quotes from strings
+                                    var t = html.match(/^\s*<p>([\s\S]*?)<\/p>\s*$/); //strip <p> and </p> that marked adds and we don't want
+                                    html = t !== null ? t[1] : html;
+                                    var q = html.match(/^&#39;([\s\S]*?)&#39;$/); // strip quotes from strings
                                     if (q !== null) html = q[1]
                                 }
                             }
@@ -164,10 +164,25 @@ define([
         var link = document.createElement("link");
         link.type = "text/css";
         link.rel = "stylesheet";
-        link.href = require.toUrl(name);
+        link.href = requirejs.toUrl(name);
         document.getElementsByTagName("head")[0].appendChild(link);
     };
 
+
+   /**
+     * Update all references variables in markdown cells
+     *
+     */
+   var update_md_cells = function () {
+       var ncells = IPython.notebook.ncells();
+       var cells = IPython.notebook.get_cells();
+       for (var i = 0; i < ncells; i++) {
+           var cell = cells[i];
+           if (cell.metadata.hasOwnProperty('variables')) {
+               render_cell(cell)
+           }
+       }
+   };
 
     var load_ipython_extension = function() {
         load_css('./main.css');
@@ -178,15 +193,15 @@ define([
 
         $('#save_widget').append('<i id="notebook-trusted-indicator" class="fa fa-question notebook-trusted" />');
         set_trusted_indicator();
-        /* show values stored in metadata on reload */
+
+        /* Show values stored in metadata on reload */
         events.on("kernel_ready.Kernel", function () {
-            var ncells = IPython.notebook.ncells();
-            var cells = IPython.notebook.get_cells();
-            for (var i = 0; i < ncells; i++) {
-                var cell = cells[i];
-                if (cell.metadata.hasOwnProperty('variables')) {
-                    render_cell(cell)
-                }
+            if (Jupyter.notebook !== undefined && Jupyter.notebook._fully_loaded) {
+                update_md_cells()
+            } else {
+                events.on("notebook_loaded.Notebook", function () {
+                    update_md_cells()
+                })
             }
         });
     };

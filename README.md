@@ -2,8 +2,8 @@ Jupyter notebook extensions
 ===========================
 
 [![Join the chat at https://gitter.im/ipython-contrib/jupyter_contrib_nbextensions](https://img.shields.io/gitter/room/ipython-contrib/jupyter_contrib_nbextensions.svg?maxAge=3600)](https://gitter.im/ipython-contrib/jupyter_contrib_nbextensions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Documentation Status](https://readthedocs.org/projects/jupyter-contrib-nbextensions/badge/?version=latest)](http://jupyter-contrib-nbextensions.readthedocs.io/en/latest/)
-[![Documentation Status](https://readthedocs.org/projects/jupyter-contrib-nbextensions/badge/?version=stable)](http://jupyter-contrib-nbextensions.readthedocs.io/en/stable/)
+[![Documentation Status](https://readthedocs.org/projects/jupyter-contrib-nbextensions/badge/?version=latest)](https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/)
+[![Documentation Status](https://readthedocs.org/projects/jupyter-contrib-nbextensions/badge/?version=stable)](https://jupyter-contrib-nbextensions.readthedocs.io/en/stable/)
 [![GitHub issues](https://img.shields.io/github/issues/ipython-contrib/jupyter_contrib_nbextensions.svg?maxAge=3600)](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/issues)
 <br/>
 [![Travis-CI Build Status](https://img.shields.io/travis/ipython-contrib/jupyter_contrib_nbextensions.svg?maxAge=3600&label=Travis)](https://travis-ci.org/ipython-contrib/jupyter_contrib_nbextensions)
@@ -15,12 +15,13 @@ Jupyter notebook extensions
 [![PyPI](https://img.shields.io/pypi/v/jupyter_contrib_nbextensions.svg?maxAge=3600)](https://pypi.python.org/pypi/jupyter_contrib_nbextensions)
 [![Anaconda cloud](https://anaconda.org/conda-forge/jupyter_contrib_nbextensions/badges/version.svg)](https://anaconda.org/conda-forge/jupyter_contrib_nbextensions)
 
-This repository contains a collection of extensions that add functionality to the Jupyter notebook.
+This repository contains a collection of extensions that add functionality to
+the Jupyter notebook.
 These extensions are mostly written in Javascript and will be loaded locally in
 your browser.
 
-The IPython-contrib repository is maintained independently by a group of users and developers and not officially related
- to the IPython development team.
+The IPython-contrib repository is maintained independently by a group of users
+and developers and not officially related to the IPython development team.
 
 The maturity of the provided extensions varies, so please
 [create an issue](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/issues/new)
@@ -32,23 +33,19 @@ if you encounter any problems.
 IPython/Jupyter version support
 ===============================
 
-| Version     | Description                                                                                    |
-|-------------|------------------------------------------------------------------------------------------------|
-| IPython 2.x | checkout [2.x branch](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tree/2.x) |
-| IPython 3.x | checkout [3.x branch](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tree/3.x) |
-| Jupyter 4.x | checkout [master branch](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/)      |
+For Jupyter version 4 or 5, use the master branch of the repository.
+Most nbextensions have been updated to work with both Jupyter 4.x and 5.x, but occasionally things get missed, or the Jupyter API changes in a minor version update, so if anything doesn't work as you'd expect/hope, please do check the issues, or open a new one as necessary!
 
-There are different branches of the notebook extensions in this repository.
-Please make sure you use the branch corresponding to your IPython/Jupyter version.
+This repo is pretty much all in the main master branch, although there remain vestigial branches for IPython notebook versions 2.x and 3.x.
 
 
 Documentation
 =============
 
 Documentation for all maintained extensions can be found at
-[Contributed Jupyter Noteboox Extensions on ReadTheDocs](http://jupyter-contrib-nbextensions.readthedocs.io/en/latest)
+[jupyter-contrib-nbextensions.readthedocs.io](https://jupyter-contrib-nbextensions.readthedocs.io/en/latest)
 
-In the 4.x Jupyter repository, all extensions that are maintained and active
+All extensions that are maintained and active
 have at least a  yaml file to allow them being configured using the
 [jupyter_nbextensions_configurator](https://github.com/Jupyter-contrib/jupyter_nbextensions_configurator)
 server extension, which is installed as a dependency of this package.
@@ -56,11 +53,11 @@ Most also have a markdown readme file for documentation.
 The `jupyter_nbextensions_configurator` server extension shows an nbextensions
 tab on the main notebook dashboard (file tree page) from which you can see each
 nbextension's markdown readme, and configure its options.
-To view documentation without installing, you can browse the nbextensions
+To view documentation without installing, you can check the list at
+[jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions.html](http://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions.html),
+or browse the nbextensions
 directory to read markdown readmes on github at
 [github.com/ipython-contrib/jupyter_contrib_nbextensions/tree/master/src/jupyter_contrib_nbextensions/nbextensions](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tree/master/src/jupyter_contrib_nbextensions/nbextensions).
-
-For older releases (2.x and 3.x), look at the [Wiki](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/wiki)
 
 Some extensions are not documented. We encourage you to add documentation for them.
 
@@ -93,7 +90,8 @@ To install the current version from PyPi, simply type
 
     pip install jupyter_contrib_nbextensions
 
-Alternatively, you can install directly from the current master branch of the repository
+Alternatively, you can install directly from the current master branch of the
+repository
 
     pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master
 
@@ -103,14 +101,16 @@ upgrade, or `-e` for an editable install.
 
 ### Conda
 
-There are conda packages for the notebook extensions and the notebook extensions configurator
-available from [conda-forge](https://conda-forge.github.io). You can install both using
+There are conda packages for the notebook extensions and the
+[jupyter_nbextensions_configurator](https://github.com/Jupyter-contrib/jupyter_nbextensions_configurator)
+available from [conda-forge](https://conda-forge.github.io).
+You can install both using
 
     conda install -c conda-forge jupyter_contrib_nbextensions
 
 This also automatically installs the Javascript and CSS files
-(using `jupyter contrib nbextension install --sys-prefix`), so the second installation step
-below can therefore be skipped.
+(using `jupyter contrib nbextension install --sys-prefix`), so the second
+installation step below can therefore be skipped.
 
 
 ### Installation from cloned Repo
@@ -152,7 +152,7 @@ including
  * `--debug`, for more-verbose output
 
 In addition, two further option flags are provided to perform either only the
-config-editing perations, or only the file-copy operations:
+config-editing operations, or only the file-copy operations:
 
  * `--only-files` to install nbextension files without editing any config files
  * `--only-config` to edit the config files without copying/symlinking any
@@ -162,6 +162,12 @@ config-editing perations, or only the file-copy operations:
       in the python module `jupyter_contrib_nbextensions.nbconvert_support`
     - `jupyter_notebook_config.json` to enable the serverextension
       `jupyter_nbextensions_configurator`.
+
+Finally, the `--perform-running-check` option flag is provided in order to
+prevent the installation from proceeding if a notebook server appears to be
+currently running
+(by default, the install will still be performed, even if a notebook server
+appears to be running).
 
 An analogous `uninstall` command is also provided, to remove all of the
 nbextension files from the jupyter directories.
@@ -187,134 +193,52 @@ To disable the extension again, use
 [jupyter_nbextensions_configurator](https://github.com/Jupyter-contrib/jupyter_nbextensions_configurator)
 server extension, which is installed as a dependency of this repo, and can be
 used to enable and disable the individual nbextensions, as well as configure
-their options. You just have to open a tab at `http://localhost:8888/nbextensions/` (you may have to adjust the port) and you will have access to a dashboard where extensions can be enabled/disabled via checkboxes. Additionally a short documentation for each extension is displayed and configuration options are presented.
+their options. You can then open the `nbextensions` tab on the tree
+(dashboard/file browser) notebook page to configure nbextensions.
+You will have access there to a dashboard where extensions can be
+enabled/disabled via checkboxes.
+Additionally a short documentation for each extension is displayed, and
+configuration options are presented.
 
 ![jupyter_nbextensions_configurator](https://raw.githubusercontent.com/Jupyter-contrib/jupyter_nbextensions_configurator/master/src/jupyter_nbextensions_configurator/static/nbextensions_configurator/icon.png)
 
 
-4\. Migrating from older versions of this repo
-----------------------------------------------
-
-The `jupyter contrib nbextensions` command also offers a `migrate` subcommand,
-which will
-
- * uninstall the old repository version's files, config and python package
- * adapt all `require` paths which have changed. E.g. if you had the
-    collapsible headings nbextension enabled with its old require path of
-    `usability/collapsible_headings/main`, the `migrate` command will alter
-    this to match the new require path of `collapsible_headings/main`.
+4\. More complex setups
+-----------------------
 
 For complex or customized installation scenarios, please look at the
 documentation for installing notebook extensions, server extensions, nbconvert
-pre/postprocessors and templates on the [Jupyter homepage](http://www.jupyter.org).
-More information can also be found in the
-[Wiki](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/wiki).
+pre/postprocessors and templates on the [Jupyter homepage](https://jupyter.org).
+Most nbextensions here should work fine with jupyterhub (because jupyterhub spawns regular notebook servers for each individual user), but won't work with jupyterlab (because the jupyterlab javascript framework is different to notebook's, and still rapidly changing under active development).
 
-See also [installing Jupyter](http://jupyter.readthedocs.io/en/latest/install.html)
+See also [installing Jupyter](https://jupyter.readthedocs.io/en/latest/install.html)
 
 
 Notebook extension structure
 ============================
 
-The nbextensions are stored each as a separate subdirectory of `src/jupyter_contrib_nbextensions/nbextensions`
-Each notebook extension typically has it's own directory containing:
- * `thisextension/main.js` - javascript implementing the extension
- * `thisextension/main.css` - optional CSS
- * `thisextension/readme.md` - readme file describing the extension in markdown format
- * `thisextension/config.yaml` - file describing the extension to the `jupyter_nbextensions_configurator` server extension
+Most of the nbextensions are stored in the repository each as a separate subdirectory of
+[`src/jupyter_contrib_nbextensions/nbextensions`](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tree/master/src/jupyter_contrib_nbextensions/nbextensions).
+
+Each notebook extension typically has its own directory named after the extension, containing:
+
+ * `thisextension/thisextension.js` - javascript implementing the nbextension
+ * `thisextension/thisextension.yml` - file describing the nbextension to the `jupyter_nbextensions_configurator` server extension
+ * `thisextension/thisextension.css` - optional CSS file, which may be loaded by the javascript
+ * `thisextension/README.md` - readme file describing the nbextension in markdown format
+
+A few (jupyter_highlight_selected_word, jupyter_latex_envs), exist as separate packages on pypi, which are included as dependencies of this package.
+
+For further details, see [the documentation at jupyter-contrib-nbextensions.readthedocs.io](http://jupyter-contrib-nbextensions.readthedocs.io/en/latest/internals.html).
+
+
+Contributing
+============
+
+To learn how to setup a development environment and for contribution guidelines, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 
 Changes
 =======
 
-0.2.3
------
-Alterations to the installation machinery:
-  - #801 @jcb91 updates to migrate script addressing renames
-  - #807 @jcb91 setup.py fixes
-New nbextensions, new features and bugfixes:
-  - #796 @oxinabox [AddBefore] Add new nbextension
-  - #746, #802 @jfbercher, @jcb91 [latex_envs] replace vendored `latex_envs` with its pypi package
-  - #794 @juhasch [codefolding] Only execute codefolding preprocessor when requested
-  - #804 @jcb91 [jupyter_highlight_selected_word] add jupyter_highlight_selected_word nbextension
-  - #795 @jfbercher [toc2] Highlight toc headings for sections with selected/edited/running cells; fix save issue #762
-  - #803 @jfbercher [toc2] make higlight colours configurable; configurably allow shifting title, menus & icons to the left, ratehr than centring
-  - #810 @jfbercher [toc2] take account of nb metadata in html export
-  - #813 @jcb91 [limit_output] allow per-cell override of limit length, make output-limited notes persist through notebook save & reload, limit outputs even over several distinct output events
-  - #814 @jcb91 [init_cell] make automatic running of initialization cells configurable (fixes #812), prevent automatic run of initialization cells in untrusted notebooks
-Some CI updates:
-  - #797 @jcb91 provide a git-based conda recipe, and check its build/install in travis
-  - #806 @jcb91 fix tox env pypi_upload
-
-0.2.2
------
-Alterations to the installation machinery:
-  - [#774](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/774) [@jcb91](https://github.com/jcb91) Add flags to install only files/only config modifications.
-  - [#769](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/769) [@jcb91](https://github.com/jcb91) Use jupyter_nbextensions_configurator's actual install app
-New nbextensions, new features and bugfixes:
-  - [#787](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/787) [@jcb91](https://github.com/jcb91) [scratchpad] Updates from master repo
-  - [#784](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/784) [@azjps](https://github.com/azjps) [limit_output] fix missing braces
-  - [#768](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/768) [@lll9p](https://github.com/lll9p) [collapsible_headings] Make level test code robust to undefined cell
-  - [#770](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/770) [@jfbercher](https://github.com/jfbercher) [code_prettify] Update to address [#767](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/issues/767)
-  - [#765](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/765) [@kukanya](https://github.com/kukanya) [Freeze] Extend functionality to markdown cells
-  - [#781](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/781) [@kukanya](https://github.com/kukanya) [ScrollDown] Add new nbextension
-Updates to readme/docs:
-  - [#790](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/790) [@juhasch](https://github.com/juhasch) mention PyPi install source in readme
-  - [#789](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/789) [@jcb91](https://github.com/jcb91) A few minor readme updates
-  - [#788](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/788) [@jcb91](https://github.com/jcb91) update installation instructions
-  - [#773](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/773) [@jcb91](https://github.com/jcb91) generate docs without conversion
-Some CI updates:
-  [#778](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/778),
-  [#779](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/779),
-  [#772](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/772),
-  [#771](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/771),
-  [#766](https://github.com/ipython-contrib/jupyter_contrib_nbextensions/pulls/766)
-
-
-
-0.2.1
------
-* New features:
-  - New `html_embed` nbconvert exporter
-  - Added `select_keymap` nbextension
-* Docs improvements:
-  - get docs readable at [jupyter-contrib-nbextensions.readthedocs.io](http://jupyter-contrib-nbextensions.readthedocs.io/)
-  - add an auto-enabled nbextension `contrib_nbextensions_help_item`, which
-    adds a help menu item to point at RTD
-  - Add missing readmes/yaml links to readmes
-* bugfixes/improvements:
-  - added tests for `toc2` and `html_embed` exporters
-  - tooltips on `higlighter`
-  - `toc2` issue with zero-length navigation menu
-  - switch `table_beautifier` from bootstrap-table to tablesorter plugin
-  - `code_prettify`: corrected insufficient re replacement
-  - `dragdrop` fix url generation when using non-default base_url
-
-
-0.2.0
------
-* __alter app default settings__
-  * Make `--user` flag in install app default to `False`
-* __New__ `code_prettify` extension
-* __add plural nbextensions command alias__ i.e. `jupyter contrib nbextensions` as an alias of `jupyter contrib nbextension`
-* docs:
-  * Add docs generation
-  * Add lots of missing readme & yaml files
-  * Attempt to get docs builds working on readthedocs
-* Bugfixes: `limit_output`, postprocessors, nbconvert support
-* Remove stale `breakpoints` extension
-* various CI & packaging fixes/improvements, including adding conda-forge installation
-* `latex_envs`:
-  * update for MathJax use and html export
-  * add latex_envs.py - exporter library
-  * add templates for conversion
-  * configure entry points for exporters in `setup.py`
-  * update readme
-* `toc2`:
-  * modifications to templates
-  * configure entry points for exporters in `setup.py`
-  * update README
-
-0.1.0
------
-* first release with pep-440 compatible versioning
+For changes, see the [CHANGELOG.md](./CHANGELOG.md)

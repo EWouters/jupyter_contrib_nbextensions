@@ -13,7 +13,8 @@ from traitlets import Bool, Unicode, default
 
 import jupyter_contrib_nbextensions
 from jupyter_contrib_nbextensions.install import (
-    install, toggle_install_config, toggle_install_files, uninstall,
+    NotebookRunningError, install, toggle_install_config, toggle_install_files,
+    uninstall,
 )
 from jupyter_contrib_nbextensions.migrate import migrate
 
@@ -71,6 +72,16 @@ class BaseContribNbextensionsInstallApp(BaseContribNbextensionsApp):
             {'BaseContribNbextensionsInstallApp': {'symlink': True}},
             'Create symlinks for nbextensions instead of copying files'
         ),
+        'skip-running-check': (
+            {'BaseContribNbextensionsInstallApp':
+                {'skip_running_check': True}},
+            'Perform actions even if notebook server(s) are already running'
+        ),
+        'perform-running-check': (
+            {'BaseContribNbextensionsInstallApp':
+                {'skip_running_check': False}},
+            'Only perform actions if no notebook server(s) are running'
+        ),
     }
 
     _conflicting_flagsets = [['--user', '--system', '--sys-prefix'], ]
@@ -91,6 +102,9 @@ class BaseContribNbextensionsInstallApp(BaseContribNbextensionsApp):
         '', config=True,
         help='Full path to nbextensions dir '
         '(consider instead using system, sys_prefix, prefix or user option)')
+    skip_running_check = Bool(
+        True, config=True,
+        help='Perform actions even if notebook server(s) are already running')
 
     def parse_command_line(self, argv=None):
         """
@@ -105,6 +119,7 @@ class BaseContribNbextensionsInstallApp(BaseContribNbextensionsApp):
                         ', '.join(conflicting_flags)))
         return super(BaseContribNbextensionsInstallApp,
                      self).parse_command_line(argv)
+
 
 BaseContribNbextensionsInstallApp.flags['s'] = (
     BaseContribNbextensionsInstallApp.flags['symlink'])
@@ -152,15 +167,23 @@ class InstallContribNbextensionsApp(BaseContribNbextensionsInstallApp):
             sys.exit('{} takes no extra arguments'.format(self.name))
         self.log.info('{} {}'.format(self.name, ' '.join(self.argv)))
         kwargs = dict(
-            user=self.user, sys_prefix=self.sys_prefix, logger=self.log)
+            user=self.user, sys_prefix=self.sys_prefix, logger=self.log,
+            skip_running_check=self.skip_running_check)
         kwargs_files = dict(**kwargs)
         kwargs_files.update(dict(
             prefix=self.prefix, nbextensions_dir=self.nbextensions_dir,
             overwrite=self.overwrite, symlink=self.symlink))
-        if not self.only_config:
-            toggle_install_files(self._toggle_value, **kwargs_files)
-        if not self.only_files:
-            toggle_install_config(self._toggle_value, **kwargs)
+        try:
+            if not self.only_config:
+                toggle_install_files(self._toggle_value, **kwargs_files)
+            if not self.only_files:
+                toggle_install_config(self._toggle_value, **kwargs)
+        except NotebookRunningError as err:
+            self.log.warn('Error: %s', err)
+            self.log.info(
+                'To perform actions even while a notebook server is running,'
+                'you may use the flag\n--skip-running-check')
+            raise
 
 
 class UninstallContribNbextensionsApp(InstallContribNbextensionsApp):
@@ -223,11 +246,13 @@ def jupyter_contrib_core_app_subcommands():
     subcommands['nbextensions'] = subcommands['nbextension']
     return subcommands
 
+
 # -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
 
 main = ContribNbextensionsApp.launch_instance
+
 
 if __name__ == '__main__':
     main()

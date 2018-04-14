@@ -3,7 +3,11 @@ Codefolding
 
 This extension adds codefolding functionality from CodeMirror to a codecell.
 
-After clicking on the gutter (left margin of codecell) or typing `Alt+F`, the code gets folded. See the examples below. The folding status is saved in the cell metadata of the notebook, so reloading of a notebook will restore the folding view.
+In edit mode, clicking on the triangle in the gutter (left margin of codecell) or typing the codefolding hotkey 
+(default is `Alt+F`), folds the code. 
+In command mode, the folding hotkey relates to the first line of the codecell. 
+
+See the examples below. The folding status is saved in the cell metadata of the notebook, so reloading of a notebook will restore the folding view.
 
 Supported modes
 ---------------
@@ -52,11 +56,13 @@ Folded:
 ![](magic-folded.png)
 
 
+
 Internals
 ---------
 
-When saving a notebook, the folding information is saved in the metadata of each codecell. 
-The number of the folding start line (beginning with 0) is stored in an array: 
+When saving a notebook, the folding information is saved in the metadata of
+each codecell.
+The number of the folding start line (beginning with 0) is stored in an array:
 
 ```javascript
 cell.metadata.code_folding = [ 3, 20, 33 ]
@@ -64,15 +70,22 @@ cell.metadata.code_folding = [ 3, 20, 33 ]
 
 When reloading the notebook, the folding status is restored.
 
+The codefolding hotkey can be customized using the notebook extensions configurator.
+The settings are stored as `"codefolding_hotkey": "alt-f"` in `the notebook.json` configuration file.
+
 
 Exporting
 ---------
 
-To export a notebook containing folded cells, you will need to apply a custom preprocessor for nbconvert. 
-The preprocessor is located in `jupyter_contrib_nbextensions/nbconvert_support/pre_codefolding.py`.
+To export a notebook containing folded cells, you will need to apply a custom
+preprocessor for nbconvert.
+The preprocessor is located in
+`jupyter_contrib_nbextensions.nbconvert_support.pre_codefolding`.
 
-The preprocessor is installed when you install the jupyter_contrib_nbextensions package.
-To activate the preprocessor manually, add the following lines to `jupyter_nbconvert_config.py`:
+The preprocessor is installed when you install the
+`jupyter_contrib_nbextensions` package.
+To activate the preprocessor manually,
+add the following lines to `jupyter_nbconvert_config.py`:
 
 ```python
 Exporter.preprocessors += ['jupyter_contrib_nbextensions.nbconvert_support.CodeFoldingPreprocessor']

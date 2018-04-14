@@ -2,10 +2,12 @@
 
 define([
     'jquery',
-    'base/js/namespace'
+    'base/js/namespace',
+    'base/js/events'
 ], function(
     $,
-    Jupyter
+    Jupyter,
+    events
 ) {
     "use strict";
 
@@ -28,26 +30,22 @@ define([
     var load_ipython_extension = function() {
 
         // Add a button to the toolbar
-        Jupyter.toolbar.add_buttons_group([{
-            id: 'btn-hide-input',
-            label: 'Toggle selected cell input display',
-            icon: 'fa-chevron-up',
-            callback: function() {
-                toggle_selected_input();
-                setTimeout(function() { $('#btn-hide-input').blur(); }, 500);
-            }
-        }]);
+        $(Jupyter.toolbar.add_buttons_group([
+            Jupyter.keyboard_manager.actions.register({
+                help   : 'Toggle selected cell input display',
+                icon   : 'fa-chevron-up',
+                handler: function() {
+                    toggle_selected_input();
+                    setTimeout(function() { $('#btn-hide-input').blur(); }, 500);
+                }
+            }, 'toggle-cell-input-display', 'hide_input')
+        ])).find('.btn').attr('id', 'btn-hide-input');
         // Collapse all cells that are marked as hidden
-        if (typeof Jupyter.notebook === 'undefined') {
-            // notebook not loaded yet. add callback for when it's loaded.
-            require(['base/js/events'], function (events) {
-                events.on("notebook_loaded.Notebook", update_input_visibility)
-                });
-            }
-        else {
+        if (Jupyter.notebook !== undefined && Jupyter.notebook._fully_loaded) {
             // notebook already loaded. Update directly
             update_input_visibility();
         }
+        events.on("notebook_loaded.Notebook", update_input_visibility);
     };
 
     return {

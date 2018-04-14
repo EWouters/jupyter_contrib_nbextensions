@@ -2,15 +2,17 @@
 
 define([
     'jquery',
-    'base/js/namespace'
+    'base/js/namespace',
+    'base/js/events'
 ], function(
     $,
-    IPython
+    Jupyter,
+    events
 ) {
     "use strict";
 
     function set_input_visible(show) {
-        IPython.notebook.metadata.hide_input = !show;
+        Jupyter.notebook.metadata.hide_input = !show;
 
         if (show) $('div.input').show('slow');
         else $('div.input').hide('slow');
@@ -29,18 +31,26 @@ define([
         set_input_visible($('#toggle_codecells').hasClass('active'));
     }
 
-    var load_ipython_extension = function() {
-        IPython.toolbar.add_buttons_group([{
-            id : 'toggle_codecells',
-            label : 'Hide codecell inputs',
-            icon : 'fa-eye',
-            callback : function() {
-                toggle();
-                setTimeout(function() { $('#toggle_codecells').blur(); }, 500);
-            }
-        }]);
+    function initialize () {
+        set_input_visible(Jupyter.notebook.metadata.hide_input !== true);
+    }
 
-        set_input_visible(IPython.notebook.metadata.hide_input !== true);
+    var load_ipython_extension = function() {
+        $(Jupyter.toolbar.add_buttons_group([
+            Jupyter.keyboard_manager.actions.register({
+                help   : 'Hide codecell inputs',
+                icon   : 'fa-eye',
+                handler: function() {
+                    toggle();
+                    setTimeout(function() { $('#toggle_codecells').blur(); }, 500);
+                }
+            }, 'hide-codecell-inputs', 'hide_input_all'),
+        ])).find('.btn').attr('id', 'toggle_codecells');
+        if (Jupyter.notebook !== undefined && Jupyter.notebook._fully_loaded) {
+            // notebook_loaded.Notebook event has already happened
+            initialize();
+        }
+        events.on('notebook_loaded.Notebook', initialize);
     };
 
     return {
